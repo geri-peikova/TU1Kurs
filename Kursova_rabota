@@ -1,0 +1,45 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<Windows.h>
+
+int main() {
+	char ch, file_name[300];
+	FILE *fp;
+	int count=0;
+
+	printf("Enter name of a file you wish to see\n");
+	gets(file_name);
+
+	fp = fopen(file_name, "r"); // read mode
+
+	if (fp == NULL)
+	{
+		perror("Error while opening the file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("The contents of %s file are:\n", file_name);
+
+	while ((ch = fgetc(fp)) != EOF) {
+		printf("%c", ch);
+
+		switch (ch){
+		case '+': count++;
+		case '-': count++;
+		case '=': count++;
+		case '*': count++;
+		case '/': count++;
+		case '<': count++;
+		case '>': count++;
+		case '&': count++;
+		case '|': count++;
+		case '?': count++;
+		}
+
+	}
+	
+	printf("\n %d", count);
+	fclose(fp);
+	return 0;
+}
