@@ -1,0 +1,79 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
+int isdelimiter(char *delim, int c);
+int main()
+{
+	FILE *fp = NULL;
+	_Bool InWord = FALSE;
+	char delimiter[] = { '[',']','(',')',';','!','=','>','<','|','*','/',':','&','%',' ','\n','\t','\0'};
+	char  word[30] = { 0 }, cmp[30] = { 0 };
+	int i=0, j=0, count1 = 0, count2 = 0,ch;
+	SetConsoleOutputCP(1251);
+	fp = fopen("b.txt", "r");
+	if (fp == NULL)
+	{
+		perror("error");
+		exit(EXIT_FAILURE);
+	}
+	printf("\nEnter word for search:");
+	scanf("%s", cmp);
+	while (getchar() != '\n');
+	while ((ch=fgetc(fp)) != EOF)
+	{
+		if (InWord == FALSE)
+		{
+			if (!isdelimiter(delimiter, ch))
+			{
+				InWord = TRUE;
+				word[j] = ch;
+				j++;
+			}
+			else
+			{
+				i++;
+				continue;
+			}
+		}
+		else
+		{
+			if (isdelimiter(delimiter, ch))
+			{
+				InWord = FALSE;
+				word[j] = '\0';
+				count1++;
+				printf("\n%s", word);
+				if (strcmp(word, cmp) == 0)
+					count2++;
+				j = 0;
+			}
+			else
+			{
+				word[j] = ch;
+				j++;
+			}
+		}
+		i++;
+	}
+	if (!feof(fp))
+	{
+		perror("error");
+		exit(EXIT_FAILURE);
+	}
+	printf("\nБрой на всички думи=%d, брой на думата %s=%d", count1, cmp, count2);
+	system("pause");
+	return 0;
+}
+//
+int isdelimiter(char *delim, int c)
+{
+	int i = 0;
+	while (delim[i])
+	{
+		if (delim[i] == c)
+			return 1;
+		i++;
+	}
+	return 0;
+}
