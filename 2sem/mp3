@@ -1,13 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#define TAG_SIZE((size_t) 3)
-#define TITLE_SIZE((size_t) 30)
+#define TAG_SIZE ((size_t) 3)
+#define TITLE_SIZE ((size_t) 30)
 
 int main(){
 	int i;
-	char tag[TAG_SIZE] = {'\0'};
-	char title[TITLE_SIZE] = {'\0'};
+	char tag[TAG_SIZE + 1] = {'\0'};
+	char title[TITLE_SIZE + 1] = {'\0'};
 	
 	FILE *file;
 	file=fopen("C:\\Users\\35988\\eclipse-workspace\\test.mp3","rb");
