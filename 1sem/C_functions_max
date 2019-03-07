@@ -1,0 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<Windows.h>
+#include<string.h>
+#include<memory.h>
+#include<assert.h>
+#include<stdbool.h>
+#include<ctype.h>
+#include "myHeader.h"
+
+int main() {
+	int a[100], n, k, max_el, min, max_index, min_undex;
+
+	do {
+		printf("\nn=");
+	}
+	printf("\nmax_el = %d", max_el);
+
+	system("pause");
+	return 0;
+}
+
+void input(int *a1, int n1) {
+	int i, k;
+	for (i = 0; i < n1; i++) 
+		do {
+		
+		}
+}
