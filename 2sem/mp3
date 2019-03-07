@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+#define TAG_SIZE((size_t) 3)
+#define TITLE_SIZE((size_t) 30)
+
+int main(){
+	int i;
+	char tag[TAG_SIZE] = {'\0'};
+	char title[TITLE_SIZE] = {'\0'};
+	
+	FILE *file;
+	file=fopen("C:\\Users\\35988\\eclipse-workspace\\test.mp3","rb");
+	
+	if(file!=0){
+		fseek(file, -128, SEEK_END);
+		fread(tag, sizeof(char), TAG_SIZE, file);
+		tag[TAG_SIZE] = '\0';
+		
+		fseek(file, -125, SEEK_END);
+		fread(title, sizeof(char), TITLE_SIZE, file);
+		title[TITLE_SIZE] = '\0';
+		
+		printf("%s %s\n", tag, title);
+		
+		fclose(file);
+	}
+	return 0;
+}
