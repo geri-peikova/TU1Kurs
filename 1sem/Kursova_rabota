@@ -1,0 +1,186 @@
+/*
+	Задача 21:
+	Да се състави блок схема и програма, която чете C програма и намира:
+		~ броят на коментарите в програмата
+		~ броят на операторите в програмата
+	
+	Програмата да започва с меню със следните опции:
+		~ четене програмата от файл и запис на резултата във файл
+		  (потребителят трябва да въведе имената на двата файла, като файла с програмата трябва да завършва на ".с")
+		~ четене програмта от файл и извеждане на резултата на екрана (файлът въведен от потрбителя трябва да звършва на ".с")
+		~ четене на програмата от клавиатура и извеждането на файл зададен от потребителя
+		~ четене на програмата от клавиатурата и извеждане на екрана
+	Програмата да се реализира в отделни функции. Четенето от файла става по редове.
+
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#define BUFFERSIZE 50
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<Windows.h>
+
+int main() {
+
+	SetConsoleOutputCP(1251);
+	int choice, count_comments=0, count_operators=0,count=0;
+	char text[2000], file_name[300],c, buffer[BUFFERSIZE], *txt = calloc(1,1);
+	FILE *file1, *file2;
+
+ 	choice = prMenu(choice);
+
+	switch (choice){
+		case 1:
+			printf("Име на файла за четене: \n");
+			fflush(stdout);
+			scanf("%s", &file_name);
+			file1=fopen(file_name,"r");
+			if (file1) {
+					while ((c = getc(file1)) != EOF){
+						text[count]=c;
+						count++;
+					}
+
+					fclose(file_name);
+			}
+
+			count_comments = countComments(text, count_comments);
+			count_operators = countOperators(text, count_operators);
+
+			printf("Име на файла за писане: \n");
+			fflush(stdout);
+			scanf("%s", &file_name);
+			file2=fopen(file_name,"w");
+			fprintf(file2,"Брой коментари: %d\n", count_comments);
+			fprintf(file2, "Брой оператори: %d\n", count_operators);
+			fclose(file2);
+			break;
+
+		case 2:
+			printf("Име на файла за четене: \n");
+			fflush(stdout);
+			scanf("%s", &file_name);
+			file1=fopen(file_name,"r");
+			if (file1) {
+					while ((c = getc(file1)) != EOF){
+						text[count]=c;
+						count++;
+					}
+
+					fclose(file_name);
+			}
+
+			count_comments = countComments(text, count_comments);
+			count_operators = countOperators(text, count_operators);
+
+			printf("Брой коментари: %d\n", count_comments);
+			printf("Брой оператори: %d\n", count_operators);
+			break;
+
+		case 3:
+			printf("Въведете текст: \n");
+			fflush(stdout);
+			while(fgets(buffer,BUFFERSIZE, stdin)!=NULL){
+				count_comments = countComments(text,count_comments);
+				count_operators = countOperators(text, count_operators);
+			}
+
+			printf("Име на файла за писане: \n");
+			fflush(stdout);
+			scanf("%s", &file_name);
+			file2=fopen(file_name,"w");
+
+			fprintf(file2,"Брой коментари: %d\n", count_comments);
+			fprintf(file2, "Брой оператори: %d\n", count_operators);
+
+			fclose(file2);
+			break;
+
+		case 4:
+			printf("Въведете текст: \n");
+			fflush(stdout);
+			while(fgets(buffer,BUFFERSIZE, stdin)!= NULL){
+				printf("%s", buffer);
+				count_operators = countOperators(buffer, count_operators);
+				count_comments = countComments(buffer, count_comments);
+			}
+
+			printf("Брой коментари: %d\n", count_comments);
+			printf("Брой оператори: %d\n", count_operators);
+			break;
+	}
+
+	return 0;
+
+
+
+}
+
+int prMenu(int choice){
+
+	printf("1: Четене програмата от файл и запис на резултата във файл\n");
+	printf("2: Четене програмата от файл и извеждане на резултата на екрана\n");
+	printf("3: Четене на програмата от клавиатура и извеждането на файл зададен от потребителя\n");
+	printf("4: Четене на програмата от клавиатурата и извеждане на екрана\n");
+	printf("\n");
+	printf("Въведете вашия избор: \n");
+	fflush(stdout);
+	scanf("%d",&choice);
+	return choice;
+}
+
+int countComments(char text[], int count_comments){
+    int n=-1;
+
+	for(int i = 0; i<strlen(text); i++){
+		if(text[i]=='/' && text[i++]=='/') count_comments++;
+		if(text[i]=='/' && text[i++]=='*')n=0;
+		if(text[i]=='*' && text[i++]=='/' && n==0){
+			n=1;
+			count_comments++;
+		}
+	}
+
+	return count_comments;
+}
+
+int countOperators(char text[], int count_operators){
+
+	for(int i=0; i<strlen(text); i++){
+
+		switch (text[i]) {
+				case '+': if(text[i++]=='=' || '+')i++;
+				count_operators++; break;
+				case '-': if(text[i++]=='=' || '-')i++;
+				count_operators++; break;
+				case '*': if(text[i++]=='=')i++;
+				count_operators++; break;
+				case '/': if(text[i++]=='=')i++;
+				count_operators++; break;
+				case '%': if(text[i++]=='=')i++;
+				count_operators++; break;
+				case '=': if(text[i++]=='=')i++;
+				count_operators++; break;
+				case '!': if(text[i++]=='=')i++;
+				count_operators++; break;
+				case '<': if(text[i++]=='=' || '<')i++;
+				count_operators++; break;
+				case '>': if(text[i++]=='=' || '>')i++;
+					count_operators++; break;
+				case '&': if(text[i++]=='&' || '=')i++;
+					count_operators++; break;
+				case '|': if(text[i++]=='|' || '=')i++;
+					count_operators++; break;
+				case '^': count_operators++; break;
+
+
+				}
+
+
+	}
+
+	return count_operators;
+}
+
+//C:\Users\35988\eclipse-workspace\text\text.c
