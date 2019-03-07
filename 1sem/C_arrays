@@ -32,7 +32,7 @@ int main() {
 				i++;
 				continue;
 			}
-		}
+		} 
 		else {
 			if (!isspace(s[i])) {
 				inWord = false;
