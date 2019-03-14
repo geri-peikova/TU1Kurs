@@ -1,0 +1,32 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include <stdbool.h>
+#define INIT_SIZE ((size_t)10)
+
+int main() {
+	int str_size = 0;
+	char *str_buf[INIT_SIZE] = {0};
+
+	//str_buf = (char **)malloc(sizeof(char*)*INIT_SIZE);
+	FILE *file = fopen("C:\\Users\\35988\\eclipse-workspace\\shablon.txt", "r");
+	if(file != NULL)
+	{
+		size_t index = 0;
+		for(;fscanf(file, "%d ", &str_size) != EOF && index < INIT_SIZE; index++)
+		{
+			str_buf[index] = (char *)calloc(str_size+1, sizeof(char));
+			fscanf(file, "%s\n", str_buf[index]);
+		}
+
+		size_t counter = 0;
+		for(; counter < INIT_SIZE; counter++)
+		{
+			printf("%s\n", str_buf[counter]);
+		}
+		fclose(file);
+	}
+
+	//free str_buf[i]
+	//free str_buf
+	return 0;
+}
