@@ -1,0 +1,199 @@
+/* Потребителят въвежда свободен текст от клавиатурата. Запишете го в текстови файл, след което:
+      -оправете "майнуницата". Ако например човекът е въвел думата "zdrasti", вашата програма
+       трябва да я превърне в "здрасти".
+      -проверете дали потребителят не е забравил да пише главна буква в началото на всяко ново изречение.
+       Търсете наличие на точка в текста и правете следващата буква главна.
+      -направете списък на последните 10 корекции при необходимост от undo-операция.
+
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<Windows.h>
+#include<locale.h>
+
+int main() {
+		SetConsoleOutputCP(1251);
+		setlocale(LC_ALL, "UTF8");
+		char c;
+		char *text;
+		int i=0,size=0;
+
+		text = (char *) malloc(15);
+		FILE *file;
+		file=fopen("C:\\Users\\35988\\eclipse-workspace\\kursova2\\result.txt","w");
+		printf("Въведете текст: \n");
+				fflush(stdout);
+				while ((c = getc(stdin)) != EOF){
+					if(size==15){
+						text = (char *) realloc(text, (i+15));
+						size=0;
+					}
+					text[i]=c;
+					i++;
+					size++;
+				}
+
+				//sled tochka=>glavna bukva
+				for(i=0;i<strlen(text);i++){
+					if(text[i]==46 && (text[i+1]>=97 && text[i+1]<=122)){
+						text[i+1]=(text[i+1]-32);
+					}
+				}
+
+				for(int count = 0; count < strlen(text); count++){
+					switch (text[count]){
+						case 97:{ fprintf(file,"а");break;}
+						case 98:{ fprintf(file,"б");break;}
+						case 118:{ fprintf(file,"в");break;}
+						case 103:{ fprintf(file,"г");break;}
+						case 100:{ fprintf(file,"д");break;}
+						case 101:{ fprintf(file,"е");break;}
+						case 105:{ fprintf(file,"и");break;}
+						case 107:{ fprintf(file,"к");break;}
+						case 108:{ fprintf(file,"л");break;}
+						case 109:{ fprintf(file,"м");break;}
+						case 110:{ fprintf(file,"н");break;}
+						case 111:{ fprintf(file,"о");break;}
+						case 112:{ fprintf(file,"п");break;}
+						case 114:{ fprintf(file,"р");break;}
+						case 117:{ fprintf(file,"у");break;}
+						case 102:{ fprintf(file,"ф");break;}
+						case 104:{ fprintf(file,"х");break;}
+
+						case 122:{
+							if(text[count+1]==104){
+								fprintf(file,"ж");
+								count++;
+							}else{
+								fprintf(file,"з");
+							}break;
+						}
+
+
+
+						case 121:{
+							if(text[count+1]==117){
+								fprintf(file,"ю");
+								count++;
+							}else if(text[count+1]==97){
+								fprintf(file,"я");
+								count++;
+							}else{
+								fprintf(file,"й");
+							}break;
+						}
+
+						case 99:{
+							if(text[count+1]==104){
+								fprintf(file,"ч");
+								count++;
+							}break;
+						}
+
+						case 115:{
+							if(text[count+1]==104 && text[count+2]!=116){
+								fprintf(file,"ш");
+								count++;
+							}else if(text[count+1]==104 && text[count+2]==116){
+								fprintf(file,"щ");
+								count+=2;
+							}else{
+								fprintf(file,"с");
+							}break;
+						}
+
+						case 116:{
+							if(text[count+1]==115){
+								fprintf(file,"ц");
+								count++;
+							}else{
+								fprintf(file,"т");
+							}break;
+						}
+
+
+
+					//ГЛАВНИ БУКВИ
+						case (97-32):{ fprintf(file,"А");break;}
+						case (98-32):{ fprintf(file,"Б");break;}
+						case (118-32):{ fprintf(file,"В");break;}
+						case (103-32):{ fprintf(file,"Г");break;}
+						case (100-32):{ fprintf(file,"Д");break;}
+						case (101-32):{ fprintf(file,"Е");break;}
+						case (105-32):{ fprintf(file,"И");break;}
+						case (107-32):{ fprintf(file,"К");break;}
+						case (108-32):{ fprintf(file,"Л");break;}
+						case (109-32):{ fprintf(file,"М");break;}
+						case (110-32):{ fprintf(file,"Н");break;}
+						case (111-32):{ fprintf(file,"О");break;}
+						case (112-32):{ fprintf(file,"П");break;}
+						case (114-32):{ fprintf(file,"Р");break;}
+						case (117-32):{ fprintf(file,"У");break;}
+						case (102-32):{ fprintf(file,"Ф");break;}
+						case (104-32):{ fprintf(file,"Х");break;}
+
+						case (122-32):{
+							if(text[count+1]==104 || text[count+1]==(104-32)){
+								fprintf(file,"Ж");
+								count++;
+							}else{
+								fprintf(file,"З");
+							}break;
+						}
+
+
+
+						case (121-32):{
+							if(text[count+1]==117 || text[count+1]==(117-32)){
+								fprintf(file,"Ю");
+								count++;
+							}else if(text[count+1]==97){
+								fprintf(file,"Я");
+								count++;
+							}else{
+								fprintf(file,"Й");
+							}break;
+						}
+
+						case (99-32):{
+							if(text[count+1]==104 || text[count+1]==(104-32)){
+								fprintf(file,"Ч");
+								count++;
+							}break;
+						}
+
+						case (115-32):{
+							if((text[count+1]==(104-32) && text[count+2]!=(116-32)) || (text[count+1]==104 && text[count+2]!=116)){
+								fprintf(file,"Ш");
+								count++;
+							}else if((text[count+1]==104 && text[count+2]==116) || (text[count+1]==(104-32) && text[count+2]==(116-32))){
+								fprintf(file,"Щ");
+								count+=2;
+							}else{
+								fprintf(file,"С");
+							}break;
+						}
+
+						case (116-32):{
+							if(text[count+1]==(115-32) || text[count+1]==115){
+								fprintf(file,"Ц");
+								count++;
+							}else{
+								fprintf(file,"Т");
+							}break;
+						}
+						default: fprintf(file,"%c",text[count]);
+
+
+					}
+				}
+
+				fflush(stdout);
+				fclose(file);
+				free(text);
+		return 0;
+}
+
