@@ -14,16 +14,29 @@
 #include<Windows.h>
 #include<locale.h>
 
+struct node {
+   int line;
+   int id;
+   struct node *next;
+};
+
+struct node *head = NULL;
+
+void printList(FILE* file);
+void insertFirst(int id, char *line) ;
+
 int main() {
 		SetConsoleOutputCP(1251);
 		setlocale(LC_ALL, "UTF8");
 		char c;
 		char *text;
-		int i=0,size=0;
+		char *line;
+		int i=0,size=0, count_lines=0;
 
 		text = (char *) malloc(15);
+		line = (char *) malloc(15);
 		FILE *file;
-		file=fopen("C:\\Users\\35988\\eclipse-workspace\\kursova2\\result.txt","w");
+		file=fopen("C:\\Users\\35988\\eclipse-workspace\\kursova2\\result.txt","w+");
 		printf("Въведете текст: \n");
 				fflush(stdout);
 				while ((c = getc(stdin)) != EOF){
@@ -36,15 +49,17 @@ int main() {
 					size++;
 				}
 
-				//sled tochka=>glavna bukva
+				//Буквата, след всяка точка става главна
 				for(i=0;i<strlen(text);i++){
 					if(text[i]==46 && (text[i+1]>=97 && text[i+1]<=122)){
 						text[i+1]=(text[i+1]-32);
 					}
 				}
 
+				// Преобразува малките букви от латински на кирилица и брои редове
 				for(int count = 0; count < strlen(text); count++){
 					switch (text[count]){
+						case '\n':{fprintf(file,"\n");count_lines++;break;}
 						case 97:{ fprintf(file,"а");break;}
 						case 98:{ fprintf(file,"б");break;}
 						case 118:{ fprintf(file,"в");break;}
@@ -116,7 +131,7 @@ int main() {
 
 
 
-					//ГЛАВНИ БУКВИ
+					// Преобразува главни букви от латински на кирилица
 						case (97-32):{ fprintf(file,"А");break;}
 						case (98-32):{ fprintf(file,"Б");break;}
 						case (118-32):{ fprintf(file,"В");break;}
@@ -191,9 +206,64 @@ int main() {
 					}
 				}
 
-				fflush(stdout);
-				fclose(file);
-				free(text);
+				// Последните 10 реда се вкарват в списък и се принтират във файла
+				size=0;
+				int counting=0;
+				i=0;
+				while(count_lines>10){
+					if(text[i]=='\n'){count_lines--;}
+					i++;
+				}
+					count_lines=1;
+					for(;i<strlen(text);i++){
+						if(size==15){
+							line = (char *) realloc(line, (i+15));
+							size=0;
+						}
+
+						line[counting]=text[i];
+						size++;
+						counting++;
+						if(text[i]=='\n'){
+							insertFirst(count_lines, line);
+							printf("%d",count_lines);
+							printf("%s",line);
+							counting=0;
+							count_lines++;
+
+							memset(line,0,strlen(line));
+
+						}
+					}
+
+
+		printList(file);
+
+		fflush(stdout);
+		fclose(file);
+		free(text);
+		free(line);
 		return 0;
+}
+
+// Листът се принтира във файла
+void printList(FILE* file) {
+   struct node *ptr = head;
+
+   while(ptr != NULL) {
+	   fprintf(file,"%d. %c \n",ptr->id,ptr->line);	//TODO: prevurni go v string
+      ptr = ptr->next;
+   }
+}
+
+// Създава се лист
+void insertFirst(int id, char *line) {
+   struct node *link = (struct node*) malloc(sizeof(struct node));
+
+   link->id = id;
+   link->line = *line;
+   link->next = head;
+
+   head = link;
 }
 
