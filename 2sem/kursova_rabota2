@@ -15,7 +15,7 @@
 #include<locale.h>
 
 struct node {
-   int line;
+   char line;
    int id;
    struct node *next;
 };
@@ -251,7 +251,7 @@ void printList(FILE* file) {
    struct node *ptr = head;
 
    while(ptr != NULL) {
-	   fprintf(file,"%d. %c \n",ptr->id,ptr->line);	//TODO: prevurni go v string
+	   fprintf(file,"%d. %s \n",ptr->id,ptr->line);	//TODO: prevurni go v string
       ptr = ptr->next;
    }
 }
@@ -259,7 +259,6 @@ void printList(FILE* file) {
 // Създава се лист
 void insertFirst(int id, char *line) {
    struct node *link = (struct node*) malloc(sizeof(struct node));
-
    link->id = id;
    link->line = *line;
    link->next = head;
